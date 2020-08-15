@@ -44,7 +44,7 @@ jobs:
         run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
       - name: Build arm
         working-directory: build-example
-        run: DOCKER_BUILDKIT=1 docker build -t charlesdburton/multi-arch:arm --target=arm --arch=arm --file=./Dockerfile .
+        run: DOCKER_BUILDKIT=1 docker build -t charlesdburton/multi-arch:arm --target=arm --file=./Dockerfile .
       - name: Push Image
         run: docker push charlesdburton/multi-arch:arm
   
