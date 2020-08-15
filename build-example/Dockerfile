@@ -1,0 +1,19 @@
+FROM golang:latest as build-arm64
+RUN mkdir /app
+WORKDIR /app
+COPY ./ .
+RUN GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -ldflags="-w -s" -o api
+
+FROM golang:latest as build-amd64
+RUN mkdir /app
+WORKDIR /app
+COPY ./ .
+RUN GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o api
+
+FROM scratch as arm64
+COPY --from=build-arm64 /app/api /go/bin/api
+ENTRYPOINT ["/go/bin/api"]
+
+FROM scratch as amd64
+COPY --from=build-amd64 /app/api /go/bin/api
+ENTRYPOINT ["/go/bin/api"]
