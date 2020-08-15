@@ -1,0 +1,23 @@
+name: ExampleBuild
+
+on:
+  push:
+    paths:
+    - 'build-example/**.go'
+    - 'build-example/Dockerfile'
+    branches:
+    - master
+
+jobs:
+  example-build-amd64:
+    runs-on: ubuntu-latest
+    name: Build amd64 version of example service
+    steps:
+      - uses: actions/checkout@v1
+      - name: Docker Login
+        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+      - name: Build amd64
+        working-directory: build-example
+        run: DOCKER_BUILDKIT=1 docker build -t charlesdburton/multi-arch:amd64 --target=amd64 --file=./Dockerfile .
+      - name: Push Image
+        run: docker push charlesdburton/multi-arch:amd64
