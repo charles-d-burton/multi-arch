@@ -51,7 +51,7 @@ jobs:
   example-build-manifest:
     runs-on: ubuntu-latest
     name: Collect manifest and push
-    needs: [" example-build-arm", " example-build-arm64", " example-build-amd64"]
+    needs: ["example-build-arm", "example-build-arm64", "example-build-amd64"]
     steps:
     - uses: actions/checkout@v1
     - name: Docker Login
