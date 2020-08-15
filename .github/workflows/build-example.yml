@@ -55,18 +55,18 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Docker Login
-        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+      run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
     - name: Build Manifest
-        run: |
-        DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create charlesdburton/multi-arch:latest \
-        charlesdburton/multi-arch:amd64 \
-        charlesdburton/multi-arch:arm \
-        charlesdburton/multi-arch:arm64 
+      run: |
+      DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create charlesdburton/multi-arch:latest \
+      charlesdburton/multi-arch:amd64 \
+      charlesdburton/multi-arch:arm \
+      charlesdburton/multi-arch:arm64 
     - name: Annotate Arm
-        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm
+      run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm
     - name: Annotate Arm64
-        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm64
+      run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm64
     - name: Annotate AMD64
-        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch amd64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:amd64
+      run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch amd64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:amd64
     - name: Push Manifest
-        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest push charlesdburton/multi-arch:latest
+      run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest push charlesdburton/multi-arch:latest
