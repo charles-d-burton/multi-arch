@@ -47,3 +47,26 @@ jobs:
         run: DOCKER_BUILDKIT=1 docker build -t charlesdburton/multi-arch:arm --target=arm --file=./Dockerfile .
       - name: Push Image
         run: docker push charlesdburton/multi-arch:arm
+  
+  example-build-manifest:
+    runs-on: ubuntu-latest
+    name: Collect manifest and push
+    needs: [" example-build-arm", " example-build-arm64", " example-build-amd64"]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Docker Login
+        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+    - name: Build Manifest
+        run: |
+        DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create charlesdburton/multi-arch:latest \
+        charlesdburton/multi-arch:amd64 \
+        charlesdburton/multi-arch:arm \
+        charlesdburton/multi-arch:arm64 
+    - name: Annotate Arm
+        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm
+    - name: Annotate Arm64
+        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:arm64
+    - name: Annotate AMD64
+        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch amd64 charlesdburton/multi-arch:latest charlesdburton/multi-arch:amd64
+    - name: Push Manifest
+        run: DOCKER_CLI_EXPERIMENTAL=enabled docker manifest push charlesdburton/multi-arch:latest
