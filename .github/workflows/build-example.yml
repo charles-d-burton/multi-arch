@@ -2,9 +2,9 @@ name: ExampleBuild
 
 on:
   push:
-    paths:
-    - 'build-example/**.go'
-    - 'build-example/Dockerfile'
+    #paths:
+    #- 'build-example/**.go'
+    #- 'build-example/Dockerfile'
     branches:
     - master
 
